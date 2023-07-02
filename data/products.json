@@ -1,0 +1,26 @@
+[
+	{
+		"title": "First Book",
+		"imageUrl": "https://play-lh.googleusercontent.com/_tslXR7zUXgzpiZI9t70ywHqWAxwMi8LLSfx8Ab4Mq4NUTHMjFNxVMwTM1G0Q-XNU80",
+		"description": "",
+		"price": "20"
+	},
+	{
+		"title": "Second Book",
+		"imageUrl": "https://static.vecteezy.com/system/resources/previews/009/399/398/original/old-vintage-book-clipart-design-illustration-free-png.png",
+		"description": "",
+		"price": "19.99"
+	},
+	{
+		"title": "The Blue Book",
+		"imageUrl": "https://www.mercator-ocean.eu/wp-content/uploads/2019/11/Mock-Up_BlueBookCopernicus_2.jpg",
+		"description": "",
+		"price": "15.99"
+	},
+	{
+		"title": "Some Random Book",
+		"imageUrl": "https://media.gq.com/photos/5ad64204c8be07604e8b5f2f/1:1/w_1332,h_1332,c_limit/21-books-GQ-April-2018-041718-3x2.jpg",
+		"description": "",
+		"price": "16.99"
+	}
+]
