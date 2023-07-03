@@ -18,6 +18,17 @@ export const getProduct: RequestHandler = async (_, res) => {
 	});
 };
 
+export const getEditProduct: RequestHandler = async (req, res) => {
+	console.log(req.route);
+	const response = await Product.fetchAll();
+
+	res.render('admin/edit-product', {
+		productsList: response.productsList,
+		title: 'Edit Product',
+		path: '/admin/edit-product',
+	});
+};
+
 export const postAddProduct: RequestHandler = (req, res) => {
 	const { title, imageUrl, description, price } = req.body as {
 		title: string;
