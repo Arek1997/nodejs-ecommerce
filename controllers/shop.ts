@@ -32,6 +32,13 @@ export const getCart: RequestHandler = (_, res) => {
 	});
 };
 
+export const getOrders: RequestHandler = (_, res) => {
+	res.render('shop/orders', {
+		title: 'Your Orders',
+		path: '/orders',
+	});
+};
+
 export const getCheckout: RequestHandler = (_, res) => {
 	res.render('shop/checkout', {
 		title: 'Checkout',
