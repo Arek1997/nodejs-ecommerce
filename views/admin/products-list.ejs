@@ -2,12 +2,47 @@
 <html lang="en">
 	<head>
 		<%- include('../components/head') %>
-		<title><%= title %></title>
+		<link rel="stylesheet" href="/css/product.css" />
 	</head>
+
 	<body>
 		<%- include('../components/navigation') %>
+
 		<main>
-			<h1>Admin All Products</h1>
+			<% if (productsList?.length) { %>
+
+			<h1>Admin products</h1>
+			<p>Products amount (<%= productsList.length %>)</p>
+			<div class="grid">
+				<% productsList.forEach(product => { %>
+				<article class="card product-item">
+					<header class="card__header">
+						<h1 class="product__title"><%= product.title %></h1>
+					</header>
+					<div class="card__image">
+						<img src="<%=product.imageUrl %>" alt="<%= product.title %>"
+					</div>
+					<div class="card__content">
+						<h2 class="product__price">$ <%= product.price %></h2>
+						<p class="product__description"><%= product.description %></p>
+					</div>
+					<div class="card__actions">
+						<a href="/admin/edit-product?<%= product.title %>" class="btn"
+							>Edit</a
+						>
+						<form action="/admin/delete-product" method="POST">
+							<button class="btn">Delete</button>
+						</form>
+					</div>
+				</article>
+				<% }) %>
+			</div>
+			<% } else { %>
+			<h1>
+				You have not any products yet.
+				<a href="/admin/add-product">Add some!</a>
+			</h1>
+			<% } %>
 		</main>
 	</body>
 </html>
