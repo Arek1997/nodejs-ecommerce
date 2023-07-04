@@ -1,26 +1,30 @@
 [
 	{
+		"id": "73e8c777-e215-487e-9ff6-55ce57cd1397",
 		"title": "First Book",
 		"imageUrl": "https://play-lh.googleusercontent.com/_tslXR7zUXgzpiZI9t70ywHqWAxwMi8LLSfx8Ab4Mq4NUTHMjFNxVMwTM1G0Q-XNU80",
-		"description": "",
-		"price": "20"
+		"description": "This can be very short, like a book blurb. You want just enough social proof to make them keep reading.",
+		"price": "14.99"
 	},
 	{
+		"id": "a018693d-2de4-4ca4-884a-325e6082b02e",
 		"title": "Second Book",
 		"imageUrl": "https://static.vecteezy.com/system/resources/previews/009/399/398/original/old-vintage-book-clipart-design-illustration-free-png.png",
-		"description": "",
+		"description": "Will it make them happy or rich? Will it help them lose weight or have more friends? What do they get once they read this book?",
 		"price": "19.99"
 	},
 	{
+		"id": "1fe6c239-79bb-423d-996c-dc7aaaefe71b",
 		"title": "The Blue Book",
 		"imageUrl": "https://www.mercator-ocean.eu/wp-content/uploads/2019/11/Mock-Up_BlueBookCopernicus_2.jpg",
-		"description": "",
+		"description": "This is about letting the reader know why they should listen to you. Why you’re the guide they want to lead them through this journey.",
 		"price": "15.99"
 	},
 	{
+		"id": "88f2432e-e82b-42b0-9b1c-2d13df6463f1",
 		"title": "Some Random Book",
 		"imageUrl": "https://media.gq.com/photos/5ad64204c8be07604e8b5f2f/1:1/w_1332,h_1332,c_limit/21-books-GQ-April-2018-041718-3x2.jpg",
-		"description": "",
+		"description": "On even better, what the reader will get out of reading the book—how will their life transform because of this book?",
 		"price": "16.99"
 	}
 ]
