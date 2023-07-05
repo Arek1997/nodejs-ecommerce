@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import Product from '../models/product';
+import Product, { ProductItem } from '../models/product';
 
 export const getAddProduct: RequestHandler = (_, res) => {
 	res.render('admin/add-product', {
@@ -19,14 +19,24 @@ export const getProduct: RequestHandler = async (_, res) => {
 };
 
 export const getEditProduct: RequestHandler = async (req, res) => {
-	console.log(req.route);
-	const response = await Product.fetchAll();
+	const productId = req.params.id;
+
+	const searchProduct = await Product.getById(productId);
 
 	res.render('admin/edit-product', {
-		productsList: response.productsList,
-		title: 'Edit Product',
+		productToEdit: searchProduct,
+		title: `Edit | ${searchProduct?.title}`,
 		path: '/admin/edit-product',
 	});
+};
+
+export const postEditProduct: RequestHandler = async (req, res) => {
+	const productId = req.params.id;
+	const updatedProductData: ProductItem = req.body;
+
+	await Product.edit(productId, updatedProductData);
+
+	res.redirect('/admin/products');
 };
 
 export const postAddProduct: RequestHandler = (req, res) => {
