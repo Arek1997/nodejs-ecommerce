@@ -25,6 +25,18 @@ export const getProduct: RequestHandler = async (_, res) => {
 	});
 };
 
+export const getProductDetails: RequestHandler = async (req, res) => {
+	const productId = req.params.id;
+
+	const searchProduct = await Product.getById(productId);
+
+	res.render('shop/product-details', {
+		product: searchProduct,
+		title: `Product | ${searchProduct?.title}`,
+		path: '/products',
+	});
+};
+
 export const getCart: RequestHandler = (_, res) => {
 	res.render('shop/cart', {
 		title: 'Your Cart',
