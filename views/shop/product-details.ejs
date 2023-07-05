@@ -1,9 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
+		<%- include('../components/head') %>
+		<link rel="stylesheet" href="/css/product.css" />
 	</head>
-	<body></body>
+
+	<body>
+		<%- include('../components/navigation') %>
+
+		<main>
+			<% if (product) { %>
+
+			<h1><%= product.title %></h1>
+			<div class="grid">
+				<article class="card product-item">
+					<header class="card__header">
+						<h1 class="product__title"><%= product.title %></h1>
+					</header>
+					<div class="card__image">
+						<img src="<%=product.imageUrl %>" alt="<%= product.title %>"
+					</div>
+					<div class="card__content">
+						<h2 class="product__price">$ <%= product.price %></h2>
+						<p class="product__description"><%= product.description %></p>
+					</div>
+				</article>
+			</div>
+			<% } %>
+		</main>
+	</body>
 </html>
