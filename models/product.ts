@@ -1,8 +1,15 @@
 import fs from 'fs';
 import path from 'path';
 import { rootPath } from '../utils';
+import crypto from 'crypto';
 
-type ProductItem = { title: string };
+export interface ProductItem {
+	id: string;
+	title: string;
+	imageUrl: string;
+	description: string;
+	price: string;
+}
 interface Response {
 	productsList: ProductItem[];
 	message: string;
@@ -28,6 +35,7 @@ const getProductsFromFile = (callback: (response: Response) => void) => {
 };
 
 export default class Product {
+	readonly id: string;
 	constructor(
 		readonly title: string,
 		readonly imageUrl: string,
@@ -38,6 +46,7 @@ export default class Product {
 		this.imageUrl = imageUrl;
 		this.description = description;
 		this.price = price;
+		this.id = crypto.randomBytes(20).toString('hex');
 		this.save();
 	}
 
@@ -49,6 +58,38 @@ export default class Product {
 				console.log('writeFileErr', err);
 			});
 		});
+	}
+
+	static async edit(searchProductId: string, newData: ProductItem) {
+		try {
+			await new Promise((resolve, reject) =>
+				getProductsFromFile((data) => {
+					const { productsList } = data;
+
+					const indexofEditedProduct = productsList.findIndex(
+						(product) => product.id === searchProductId
+					);
+
+					const productToEdit = productsList[indexofEditedProduct];
+
+					const updatedProduct = { ...productToEdit, ...newData };
+
+					productsList[indexofEditedProduct] = updatedProduct;
+
+					fs.writeFile(productsPath, JSON.stringify(productsList), (err) => {
+						if (err) {
+							console.log('edit writeFileErr', err);
+							reject(err);
+						} else {
+							console.log('Product updated');
+							resolve('Product updated');
+						}
+					});
+				})
+			);
+		} catch (err) {
+			console.log(err);
+		}
 	}
 
 	static async fetchAll() {
@@ -72,6 +113,30 @@ export default class Product {
 				productsList: null,
 				message: err as string,
 			};
+		}
+	}
+
+	static async getById(id: string) {
+		try {
+			const product: ProductItem = await new Promise((resolve, reject) =>
+				getProductsFromFile((data) => {
+					const { productsList } = data;
+
+					const searchProduct = productsList.find(
+						(product) => product.id === id
+					);
+
+					if (searchProduct) {
+						resolve(searchProduct);
+					} else {
+						reject(`Not found any product with id ${id}`);
+					}
+				})
+			);
+
+			return product;
+		} catch (err) {
+			console.log(err);
 		}
 	}
 }
