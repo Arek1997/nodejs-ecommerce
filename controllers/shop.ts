@@ -15,7 +15,7 @@ export const getMainPage: RequestHandler = async (_, res) => {
 	});
 };
 
-export const getProduct: RequestHandler = async (_, res) => {
+export const getProducts: RequestHandler = async (_, res) => {
 	const response = await Product.fetchAll();
 
 	res.render('shop/products-list', {
@@ -30,11 +30,18 @@ export const getProductDetails: RequestHandler = async (req, res) => {
 
 	const searchProduct = await Product.getById(productId);
 
-	res.render('shop/product-details', {
-		product: searchProduct,
-		title: `Product | ${searchProduct?.title}`,
-		path: '/products',
-	});
+	if (searchProduct) {
+		res.render('shop/product-details', {
+			product: searchProduct,
+			title: `Product | ${searchProduct.title}`,
+			path: '/products',
+		});
+	} else {
+		res.render('shop/product-not-found', {
+			title: 'Product | Not Found',
+			path: '/products',
+		});
+	}
 };
 
 export const getCart: RequestHandler = (_, res) => {
@@ -42,6 +49,13 @@ export const getCart: RequestHandler = (_, res) => {
 		title: 'Your Cart',
 		path: '/cart',
 	});
+};
+
+export const postCart: RequestHandler = async (req, res) => {
+	const productId = req.body.id;
+	const product = await Product.getById(productId);
+
+	res.redirect('/cart');
 };
 
 export const getOrders: RequestHandler = (_, res) => {

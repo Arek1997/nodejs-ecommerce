@@ -4,19 +4,22 @@ import {
 	getCheckout,
 	getMainPage,
 	getOrders,
-	getProduct,
+	getProducts,
 	getProductDetails,
+	postCart,
 } from '../controllers/shop';
 
 const router = express.Router();
 
 router.get('/', getMainPage);
 
-router.get('/products', getProduct);
+router.get('/products', getProducts);
 
 router.get('/product/:id', getProductDetails);
 
 router.get('/cart', getCart);
+
+router.post('/add-to-cart', postCart);
 
 router.get('/orders', getOrders);
 
