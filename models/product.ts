@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { rootPath } from '../utils';
 import crypto from 'crypto';
+import Cart from './cart';
 
 export interface ProductItem {
 	id: string;
@@ -36,6 +37,7 @@ const getProductsFromFile = (callback: (response: Response) => void) => {
 
 export default class Product {
 	readonly id: string;
+
 	constructor(
 		readonly title: string,
 		readonly imageUrl: string,
@@ -51,7 +53,7 @@ export default class Product {
 	}
 
 	save() {
-		getProductsFromFile(({ productsList }) => {
+		getProductsFromFile(async ({ productsList }) => {
 			productsList.push(this);
 
 			fs.writeFile(productsPath, JSON.stringify(productsList), (err) => {
@@ -60,12 +62,10 @@ export default class Product {
 		});
 	}
 
-	static async edit(searchProductId: string, newData: ProductItem) {
+	static async edit(searchProductId: string, newData: Omit<ProductItem, 'id'>) {
 		try {
 			await new Promise((resolve, reject) =>
-				getProductsFromFile((data) => {
-					const { productsList } = data;
-
+				getProductsFromFile(({ productsList }) => {
 					const indexofEditedProduct = productsList.findIndex(
 						(product) => product.id === searchProductId
 					);
@@ -81,8 +81,8 @@ export default class Product {
 							console.log('edit writeFileErr', err);
 							reject(err);
 						} else {
-							console.log('Product updated');
-							resolve('Product updated');
+							console.log(`Product with id: ${searchProductId} updated`);
+							resolve(`Product with id: ${searchProductId} updated`);
 						}
 					});
 				})
@@ -119,9 +119,7 @@ export default class Product {
 	static async getById(id: string) {
 		try {
 			const product: ProductItem = await new Promise((resolve, reject) =>
-				getProductsFromFile((data) => {
-					const { productsList } = data;
-
+				getProductsFromFile(({ productsList }) => {
 					const searchProduct = productsList.find(
 						(product) => product.id === id
 					);
@@ -129,12 +127,43 @@ export default class Product {
 					if (searchProduct) {
 						resolve(searchProduct);
 					} else {
-						reject(`Not found any product with id ${id}`);
+						reject(`Not found any product with id: ${id}`);
 					}
 				})
 			);
 
 			return product;
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	static async remove(id: string) {
+		try {
+			await new Promise((resolve, reject) =>
+				getProductsFromFile((data) => {
+					const { productsList } = data;
+
+					const updatedProductList = productsList.filter(
+						(product) => product.id !== id
+					);
+
+					fs.writeFile(
+						productsPath,
+						JSON.stringify(updatedProductList),
+						async (err) => {
+							if (err) {
+								console.log('edit writeFileErr', err);
+								reject(err);
+							} else {
+								console.log(`Product with id: ${id} removed`);
+								resolve(`Product with id: ${id} removed`);
+							}
+						}
+					);
+				})
+			);
+			await Cart.removeProduct(id);
 		} catch (err) {
 			console.log(err);
 		}

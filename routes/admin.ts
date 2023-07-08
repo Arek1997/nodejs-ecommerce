@@ -4,6 +4,7 @@ import {
 	getEditProduct,
 	getProduct,
 	postAddProduct,
+	postDeleteProduct,
 	postEditProduct,
 } from '../controllers/admin';
 
@@ -18,5 +19,7 @@ router.get('/edit-product/:id', getEditProduct);
 router.post('/edit-product/:id', postEditProduct);
 
 router.post('/add-product', postAddProduct);
+
+router.post('/delete-product/:id', postDeleteProduct);
 
 export default router;
