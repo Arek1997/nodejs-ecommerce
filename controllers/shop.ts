@@ -1,5 +1,6 @@
 import { RequestHandler } from 'express';
 import Product from '../models/product';
+import Cart from '../models/cart';
 
 export const getMainPage: RequestHandler = async (_, res) => {
 	const response = await Product.fetchAll();
@@ -44,16 +45,32 @@ export const getProductDetails: RequestHandler = async (req, res) => {
 	}
 };
 
-export const getCart: RequestHandler = (_, res) => {
+export const getCart: RequestHandler = async (_, res) => {
+	const { items, totalAmount, totalPrice } = await Cart.get();
+
+	const getTitle = (cartLength: number) => {
+		if (cartLength === 1) {
+			return cartLength + ' item';
+		} else if (cartLength > 1) {
+			return cartLength + ' items';
+		} else {
+			return '';
+		}
+	};
+
 	res.render('shop/cart', {
-		title: 'Your Cart',
+		cart: items,
+		totalPrice,
+		totalAmount,
+		title: 'Your cart ' + getTitle(totalAmount),
 		path: '/cart',
 	});
 };
 
 export const postCart: RequestHandler = async (req, res) => {
 	const productId = req.body.id;
-	const product = await Product.getById(productId);
+
+	await Cart.addProduct(productId);
 
 	res.redirect('/cart');
 };

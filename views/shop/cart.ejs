@@ -7,6 +7,18 @@
 	<body>
 		<%- include('../components/navigation') %>
 
-		<main><h1>Cart</h1></main>
+		<main>
+			<h1>Cart (<%= totalAmount %>)</h1>
+			<h2>Total Price: $<%= totalPrice %></h2>
+			<ul>
+				<% cart.forEach(item => { %>
+				<li>
+					x<%= item.amount %>
+					<a href="/product/<%= item.id  %>"> <%=item.title %></a> ($<%=
+					item.price %>)
+				</li>
+				<% }) %>
+			</ul>
+		</main>
 	</body>
 </html>
