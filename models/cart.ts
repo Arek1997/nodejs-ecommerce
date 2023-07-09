@@ -75,7 +75,9 @@ const removeProductFromCart = async (
 ) => {
 	const productExist = cart.items.some((product) => product.id === productId);
 
-	if (!productExist) return;
+	if (!productExist) {
+		return console.log('Product does not exist');
+	}
 
 	const productToRemove = cart.items.find((item) => item.id === productId)!;
 	const updatedCart = {

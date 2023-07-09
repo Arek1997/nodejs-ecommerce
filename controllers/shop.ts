@@ -75,6 +75,14 @@ export const postCart: RequestHandler = async (req, res) => {
 	res.redirect('/cart');
 };
 
+export const postRemoveFromCart: RequestHandler = async (req, res) => {
+	const productId = req.params.id;
+
+	await Cart.removeProduct(productId);
+
+	res.redirect('/cart');
+};
+
 export const getOrders: RequestHandler = (_, res) => {
 	res.render('shop/orders', {
 		title: 'Your Orders',
