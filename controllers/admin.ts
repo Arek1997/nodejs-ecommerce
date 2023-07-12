@@ -2,10 +2,10 @@ import { RequestHandler } from 'express';
 import Product, { ProductItem } from '../models/product';
 
 export const getProduct: RequestHandler = async (_, res) => {
-	const response = await Product.fetchAll();
+	const products = await Product.fetchAll();
 
 	res.render('admin/products-list', {
-		productsList: response.productsList,
+		productsList: products ? products : [],
 		title: 'Admin Products',
 		path: '/admin/products',
 	});
@@ -19,13 +19,15 @@ export const getAddProduct: RequestHandler = (_, res) => {
 	});
 };
 
-export const postAddProduct: RequestHandler = (req, res) => {
+export const postAddProduct: RequestHandler = async (req, res) => {
 	const { title, imageUrl, description, price } = req.body as Omit<
 		ProductItem,
 		'id'
 	>;
 
-	new Product(title, imageUrl, description, price);
+	const product = new Product(title, imageUrl, description, price);
+
+	await product.save();
 
 	res.redirect('/admin/products');
 };
@@ -33,14 +35,14 @@ export const postAddProduct: RequestHandler = (req, res) => {
 export const getEditProduct: RequestHandler = async (req, res) => {
 	const productId = req.params.id;
 
-	const searchProduct = await Product.getById(productId);
+	// const searchProduct = await Product.getById(productId);
 
-	res.render('admin/edit-product', {
-		productToEdit: searchProduct,
-		title: `Edit | ${searchProduct?.title}`,
-		path: '/admin/edit-product',
-		editMode: true,
-	});
+	// res.render('admin/edit-product', {
+	// 	productToEdit: searchProduct,
+	// 	title: `Edit | ${searchProduct?.title}`,
+	// 	path: '/admin/edit-product',
+	// 	editMode: true,
+	// });
 };
 
 export const postEditProduct: RequestHandler = async (req, res) => {

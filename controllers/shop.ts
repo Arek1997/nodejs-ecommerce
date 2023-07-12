@@ -3,11 +3,9 @@ import Product from '../models/product';
 import Cart from '../models/cart';
 
 export const getMainPage: RequestHandler = async (_, res) => {
-	const response = await Product.fetchAll();
+	const products = await Product.fetchAll();
 
-	const latestProduct = response.productsList?.length
-		? [response.productsList.at(-1)]
-		: [];
+	const latestProduct = products?.length ? [products.at(-1)] : [];
 
 	res.render('shop/index', {
 		latestProduct,
@@ -17,10 +15,12 @@ export const getMainPage: RequestHandler = async (_, res) => {
 };
 
 export const getProducts: RequestHandler = async (_, res) => {
-	const response = await Product.fetchAll();
+	const products = await Product.fetchAll();
+
+	console.log(products);
 
 	res.render('shop/products-list', {
-		productsList: response.productsList,
+		productsList: products ? products : [],
 		title: 'All Products',
 		path: '/products',
 	});
@@ -33,8 +33,8 @@ export const getProductDetails: RequestHandler = async (req, res) => {
 
 	if (searchProduct) {
 		res.render('shop/product-details', {
-			product: searchProduct,
-			title: `Product | ${searchProduct.title}`,
+			product: searchProduct[0],
+			title: `Product | ${searchProduct[0].title}`,
 			path: '/products',
 		});
 	} else {
