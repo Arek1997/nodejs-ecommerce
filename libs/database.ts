@@ -1,10 +1,12 @@
-import mysql from 'mysql2';
+require('dotenv').config();
 
-const connectionPool = mysql.createPool({
-	host: 'localhost',
-	user: 'root',
-	database: 'node_complete',
-	password: 'zaq1@WSX',
-});
+import { Sequelize } from 'sequelize';
 
-export default connectionPool.promise();
+const sequelize = new Sequelize(
+	'node_complete',
+	'root',
+	process.env.MYSQL_DB_PASSWORD,
+	{ dialect: 'mysql', host: 'localhost' }
+);
+
+export default sequelize;
