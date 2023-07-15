@@ -40,5 +40,36 @@
 			</div>
 			<% } %>
 		</main>
+
+		<script>
+			const allInputs = document.querySelectorAll('input, textarea');
+
+			allInputs.forEach((item) => {
+				item.addEventListener('input', (e) => {
+					const editingElement = e.target;
+					const editingElementID = editingElement.id;
+					const editingElementValue = editingElement.value;
+					const isImageElement = editingElementID.startsWith('image');
+
+					const elementToChange = isImageElement
+						? document.querySelector(`.card__image img`)
+						: document.querySelector(`.product__${editingElementID}`);
+
+					switch (editingElementID) {
+						case 'imageUrl':
+							elementToChange.src = editingElementValue;
+							break;
+
+						case 'price':
+							elementToChange.textContent = '$' + editingElementValue;
+							break;
+
+						default:
+							elementToChange.textContent = editingElementValue;
+							break;
+					}
+				});
+			});
+		</script>
 	</body>
 </html>
