@@ -3,7 +3,7 @@ import Product from '../models/product';
 import Cart from '../models/cart';
 
 export const getMainPage: RequestHandler = async (_, res) => {
-	const products = await Product.fetchAll();
+	const products = await Product.findAll();
 
 	const latestProduct = products?.length ? [products.at(-1)] : [];
 
@@ -15,9 +15,7 @@ export const getMainPage: RequestHandler = async (_, res) => {
 };
 
 export const getProducts: RequestHandler = async (_, res) => {
-	const products = await Product.fetchAll();
-
-	console.log(products);
+	const products = await Product.findAll();
 
 	res.render('shop/products-list', {
 		productsList: products ? products : [],
@@ -29,12 +27,12 @@ export const getProducts: RequestHandler = async (_, res) => {
 export const getProductDetails: RequestHandler = async (req, res) => {
 	const productId = req.params.id;
 
-	const searchProduct = await Product.getById(productId);
+	const searchProduct = await Product.findByPk(productId);
 
 	if (searchProduct) {
 		res.render('shop/product-details', {
-			product: searchProduct[0],
-			title: `Product | ${searchProduct[0].title}`,
+			product: searchProduct.dataValues,
+			title: `Product | ${searchProduct.dataValues.title}`,
 			path: '/products',
 		});
 	} else {

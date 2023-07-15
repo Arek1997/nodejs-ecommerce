@@ -2,13 +2,17 @@ import { RequestHandler } from 'express';
 import Product, { ProductItem } from '../models/product';
 
 export const getProduct: RequestHandler = async (_, res) => {
-	const products = await Product.fetchAll();
+	try {
+		const products = await Product.findAll();
 
-	res.render('admin/products-list', {
-		productsList: products ? products : [],
-		title: 'Admin Products',
-		path: '/admin/products',
-	});
+		res.render('admin/products-list', {
+			productsList: products ? products : [],
+			title: 'Admin Products',
+			path: '/admin/products',
+		});
+	} catch (err) {
+		console.log(err);
+	}
 };
 
 export const getAddProduct: RequestHandler = (_, res) => {
@@ -25,39 +29,53 @@ export const postAddProduct: RequestHandler = async (req, res) => {
 		'id'
 	>;
 
-	const product = new Product(title, imageUrl, description, price);
+	try {
+		await Product.create({
+			title,
+			price,
+			imageUrl,
+			description,
+		});
 
-	await product.save();
-
-	res.redirect('/admin/products');
+		res.redirect('/admin/products');
+	} catch (err) {
+		console.log(err);
+	}
 };
 
 export const getEditProduct: RequestHandler = async (req, res) => {
 	const productId = req.params.id;
 
-	// const searchProduct = await Product.getById(productId);
+	const searchProduct = await Product.findByPk(productId);
 
-	// res.render('admin/edit-product', {
-	// 	productToEdit: searchProduct,
-	// 	title: `Edit | ${searchProduct?.title}`,
-	// 	path: '/admin/edit-product',
-	// 	editMode: true,
-	// });
+	res.render('admin/edit-product', {
+		productToEdit: searchProduct?.dataValues,
+		title: `Edit | ${searchProduct?.dataValues?.title}`,
+		path: '/admin/edit-product',
+		editMode: true,
+	});
 };
 
 export const postEditProduct: RequestHandler = async (req, res) => {
 	const productId = req.params.id;
 	const updatedProductData: Omit<ProductItem, 'id'> = req.body;
 
-	await Product.edit(productId, updatedProductData);
+	const productToEdit = await Product.findByPk(productId);
+
+	productToEdit?.update({
+		...productToEdit?.dataValues,
+		...updatedProductData,
+	});
+
+	await productToEdit?.save();
 
 	res.redirect('/admin/products');
 };
 
 export const postDeleteProduct: RequestHandler = async (req, res) => {
 	const productId = req.params.id;
-
-	await Product.remove(productId);
+	const produtToDelete = await Product.findByPk(productId);
+	await produtToDelete?.destroy();
 
 	res.redirect('/admin/products');
 };
