@@ -9,6 +9,59 @@
 	<body>
 		<%- include('../components/navigation') %>
 
-		<main><%- include('../components/product-form') %></main>
+		<main>
+			<div class="grid">
+				<div>
+					<h2>Current Product:</h2>
+					<article class="card product-item">
+						<header class="card__header">
+							<h1 class="product__title"></h1>
+						</header>
+						<div class="card__image">
+							<img src="" />
+						</div>
+						<div class="card__content">
+							<h2 class="product__price"></h2>
+							<p class="product__description"></p>
+						</div>
+					</article>
+				</div>
+
+				<div>
+					<h2>Add Product:</h2>
+					<%- include('../components/product-form') %>
+				</div>
+			</div>
+		</main>
+		<script>
+			const allInputs = document.querySelectorAll('input, textarea');
+
+			allInputs.forEach((item) => {
+				item.addEventListener('input', (e) => {
+					const editingElement = e.target;
+					const editingElementID = editingElement.id;
+					const editingElementValue = editingElement.value;
+					const isImageElement = editingElementID.startsWith('image');
+
+					const elementToChange = isImageElement
+						? document.querySelector(`.card__image img`)
+						: document.querySelector(`.product__${editingElementID}`);
+
+					switch (editingElementID) {
+						case 'imageUrl':
+							elementToChange.src = editingElementValue;
+							break;
+
+						case 'price':
+							elementToChange.textContent = '$' + editingElementValue;
+							break;
+
+						default:
+							elementToChange.textContent = editingElementValue;
+							break;
+					}
+				});
+			});
+		</script>
 	</body>
 </html>
