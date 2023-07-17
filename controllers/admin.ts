@@ -30,7 +30,8 @@ export const postAddProduct: RequestHandler = async (req, res) => {
 	>;
 
 	try {
-		await Product.create({
+		// create from sequelize associations, Product from out Product model = createProduct
+		await req.user.createProduct({
 			title,
 			price,
 			imageUrl,
