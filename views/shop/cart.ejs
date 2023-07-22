@@ -14,7 +14,7 @@
 			<ul>
 				<% cart.forEach(item => { %>
 				<li>
-					x<%= item.amount %>
+					x<%= item.cartItem.quantity %>
 					<a href="/product/<%= item.id  %>"> <%=item.title %></a> ($<%=
 					item.price %>)
 
@@ -24,6 +24,13 @@
 				</li>
 				<% }) %>
 			</ul>
+
+			<hr />
+
+			<form action="/create-order" method="POST">
+				<button class="btn">Order Now!</button>
+			</form>
+
 			<% } else { %>
 			<h1>Your cart is empty.</h1>
 			<% } %>
