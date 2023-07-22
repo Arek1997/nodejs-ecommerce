@@ -8,6 +8,10 @@ import { get404 } from './controllers/error';
 import sequelize from './libs/database';
 import Product from './models/product';
 import User from './models/user';
+import Cart from './models/cart';
+import CartItem from './models/cart-item';
+import Order from './models/order';
+import OrderItem from './models/order-item';
 
 const app = express();
 
@@ -35,6 +39,15 @@ app.use(get404);
 
 Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 User.hasMany(Product);
+User.hasOne(Cart);
+
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
+
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, { through: OrderItem });
 
 sequelize
 	// .sync({ force: true })
@@ -53,8 +66,11 @@ sequelize
 
 		return user;
 	})
-	.then((user) => {
+	.then((user: any) => {
 		// console.log(user);
+		return user.createCart();
+	})
+	.then((cart) => {
 		app.listen(3000);
 	})
 	.catch((err) => {
