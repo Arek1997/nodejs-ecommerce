@@ -2,7 +2,7 @@ import express from 'express';
 import {
 	getAddProduct,
 	getEditProduct,
-	getProduct,
+	getProducts,
 	postAddProduct,
 	postDeleteProduct,
 	postEditProduct,
@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get('/add-product', getAddProduct);
 
-router.get('/products', getProduct);
+router.get('/products', getProducts);
 
 router.get('/edit-product/:id', getEditProduct);
 

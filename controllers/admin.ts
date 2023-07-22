@@ -1,9 +1,10 @@
 import { RequestHandler } from 'express';
 import Product, { ProductItem } from '../models/product';
 
-export const getProduct: RequestHandler = async (_, res) => {
+export const getProducts: RequestHandler = async (req, res) => {
 	try {
-		const products = await Product.findAll();
+		// const products = await Product.findAll();
+		const products = await req.user.getProducts();
 
 		res.render('admin/products-list', {
 			productsList: products ? products : [],
@@ -47,11 +48,14 @@ export const postAddProduct: RequestHandler = async (req, res) => {
 export const getEditProduct: RequestHandler = async (req, res) => {
 	const productId = req.params.id;
 
-	const searchProduct = await Product.findByPk(productId);
+	const searchProducts = await req.user.getProducts({
+		where: { id: productId },
+	});
+	const [product] = searchProducts;
 
 	res.render('admin/edit-product', {
-		productToEdit: searchProduct?.dataValues,
-		title: `Edit | ${searchProduct?.dataValues?.title}`,
+		productToEdit: product?.dataValues,
+		title: `Edit | ${product?.dataValues?.title}`,
 		path: '/admin/edit-product',
 		editMode: true,
 	});
