@@ -115,10 +115,14 @@ export const postRemoveFromCart: RequestHandler = async (req, res) => {
 	res.redirect('/cart');
 };
 
-export const getOrders: RequestHandler = (_, res) => {
+export const getOrders: RequestHandler = async (req, res) => {
+	const orders = await req.user.getOrders({ include: ['products'] });
+	console.log('orders', orders);
+
 	res.render('shop/orders', {
 		title: 'Your Orders',
 		path: '/orders',
+		orders,
 	});
 };
 
@@ -136,6 +140,8 @@ export const postOrder: RequestHandler = async (req, res) => {
 			return product;
 		})
 	);
+
+	await cart.setProducts(null);
 
 	res.redirect('/orders');
 };

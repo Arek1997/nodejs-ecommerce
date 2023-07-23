@@ -7,6 +7,27 @@
 	<body>
 		<%- include('../components/navigation') %>
 
-		<main><h1>Orders</h1></main>
+		<main>
+			<% if (orders.length) { %>
+			<h1>Orders (<%= orders.length %>)</h1>
+
+			<ul>
+				<% orders.forEach(order => { %>
+				<li>
+					<%= order.id %>
+					<ul>
+						<% order.products.forEach(product => { %>
+						<li><%= product.title %> (<%= product.orderItem.quantity %>)</li>
+						<% }) %>
+					</ul>
+				</li>
+				<% }) %>
+			</ul>
+
+			<% } else { %>
+
+			<h1>No orders.</h1>
+			<% } %>
+		</main>
 	</body>
 </html>
