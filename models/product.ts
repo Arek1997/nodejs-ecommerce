@@ -1,7 +1,8 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../libs/database';
+import { ObjectId } from 'mongodb';
+import { getMongoDataBase } from '../libs/database';
 
 export interface ProductItem {
+	_id: ObjectId;
 	id: string;
 	title: string;
 	imageUrl: string;
@@ -13,30 +14,71 @@ interface Response {
 	message: string;
 }
 
-const Product = sequelize.define('product', {
-	id: {
-		type: DataTypes.INTEGER,
-		autoIncrement: true,
-		allowNull: false,
-		primaryKey: true,
-	},
+class Product {
+	private title: string;
+	private price: string;
+	private description: string;
+	private imageUrl: string;
 
-	title: DataTypes.STRING,
+	constructor(
+		title: string,
+		price: string,
+		description: string,
+		imageUrl: string
+	) {
+		this.title = title;
+		this.price = price;
+		this.description = description;
+		this.imageUrl = imageUrl;
+	}
 
-	price: {
-		type: DataTypes.DOUBLE,
-		allowNull: false,
-	},
+	async save() {
+		try {
+			const result = await getMongoDataBase()
+				.collection('products')
+				.insertOne(this);
 
-	imageUrl: {
-		type: DataTypes.STRING,
-		allowNull: false,
-	},
+			console.log(result);
+		} catch (err) {
+			console.log(err);
+		}
+	}
 
-	description: {
-		type: DataTypes.STRING,
-		allowNull: false,
-	},
-});
+	static async fetchAll() {
+		try {
+			const result = await getMongoDataBase()
+				.collection('products')
+				.find()
+				.toArray();
+
+			const productsWithId = result.map((item) => ({
+				...item,
+				id: item._id.toString(),
+			})) as ProductItem[];
+
+			return productsWithId;
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	static async getById(id: string) {
+		try {
+			const result = await getMongoDataBase()
+				.collection('products')
+				.find({ _id: new ObjectId(id) })
+				.toArray();
+
+			const productsWithId = result.map((item) => ({
+				...item,
+				id: item._id.toString(),
+			})) as ProductItem[];
+
+			return productsWithId;
+		} catch (err) {
+			console.log(err);
+		}
+	}
+}
 
 export default Product;
