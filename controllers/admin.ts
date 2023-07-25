@@ -32,34 +32,29 @@ export const postAddProduct: RequestHandler = async (req, res) => {
 };
 
 export const getEditProduct: RequestHandler = async (req, res) => {
-	// const productId = req.params.id;
-	// const searchProducts = await req.user.getProducts({
-	// 	where: { id: productId },
-	// });
-	// const [product] = searchProducts;
-	// res.render('admin/edit-product', {
-	// 	productToEdit: product?.dataValues,
-	// 	title: `Edit | ${product?.dataValues?.title}`,
-	// 	path: '/admin/edit-product',
-	// 	editMode: true,
-	// });
+	const productId = req.params.id;
+	const searchProducts = await Product.getById(productId);
+
+	res.render('admin/edit-product', {
+		productToEdit: searchProducts,
+		title: `Edit | ${searchProducts?.title}`,
+		path: '/admin/edit-product',
+		editMode: true,
+	});
 };
 
 export const postEditProduct: RequestHandler = async (req, res) => {
-	// const productId = req.params.id;
-	// const updatedProductData: Omit<ProductItem, 'id'> = req.body;
-	// const productToEdit = await Product.findByPk(productId);
-	// productToEdit?.update({
-	// 	...productToEdit?.dataValues,
-	// 	...updatedProductData,
-	// });
-	// await productToEdit?.save();
-	// res.redirect('/admin/products');
+	const productId = req.params.id;
+	const updatedProductData: Omit<ProductItem, 'id'> = req.body;
+
+	await Product.update(productId, updatedProductData);
+
+	res.redirect('/admin/products');
 };
 
 export const postDeleteProduct: RequestHandler = async (req, res) => {
-	// const productId = req.params.id;
-	// const produtToDelete = await Product.findByPk(productId);
-	// await produtToDelete?.destroy();
-	// res.redirect('/admin/products');
+	const productId = req.params.id;
+	await Product.remove(productId);
+
+	res.redirect('/admin/products');
 };
