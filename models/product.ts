@@ -34,11 +34,9 @@ class Product {
 
 	async save() {
 		try {
-			const result = await getMongoDataBase()
-				.collection('products')
-				.insertOne(this);
+			await getMongoDataBase().collection('products').insertOne(this);
 
-			console.log(result);
+			console.log('You successfully created product.');
 		} catch (err) {
 			console.log(err);
 		}
@@ -67,14 +65,46 @@ class Product {
 			const result = await getMongoDataBase()
 				.collection('products')
 				.find({ _id: new ObjectId(id) })
-				.toArray();
+				.next();
 
-			const productsWithId = result.map((item) => ({
-				...item,
-				id: item._id.toString(),
-			})) as ProductItem[];
+			const productsWithId = {
+				...result,
+				id: result?._id.toString(),
+			} as ProductItem;
 
 			return productsWithId;
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	static async update(
+		productId: string,
+		newData: Omit<ProductItem, '_id' | 'id'>
+	) {
+		try {
+			await getMongoDataBase()
+				.collection('products')
+				.updateOne(
+					{ _id: new ObjectId(productId) },
+					{
+						$set: newData,
+					}
+				);
+
+			console.log('You successfully updated product.');
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	static async remove(productId: string) {
+		try {
+			await getMongoDataBase()
+				.collection('products')
+				.deleteOne({ _id: new ObjectId(productId) });
+
+			console.log('You successfully removed product.');
 		} catch (err) {
 			console.log(err);
 		}
