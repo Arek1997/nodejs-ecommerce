@@ -25,7 +25,13 @@ export const postAddProduct: RequestHandler = async (req, res) => {
 		'id'
 	>;
 
-	const product = new Product(title, price, description, imageUrl);
+	const product = new Product(
+		title,
+		price,
+		description,
+		imageUrl,
+		req.user._id
+	);
 	await product.save();
 
 	res.redirect('/products');
