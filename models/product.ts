@@ -19,17 +19,20 @@ class Product {
 	private price: string;
 	private description: string;
 	private imageUrl: string;
+	private userId: string;
 
 	constructor(
 		title: string,
 		price: string,
 		description: string,
-		imageUrl: string
+		imageUrl: string,
+		userId?: string
 	) {
 		this.title = title;
 		this.price = price;
 		this.description = description;
 		this.imageUrl = imageUrl;
+		this.userId = userId || '';
 	}
 
 	async save() {
