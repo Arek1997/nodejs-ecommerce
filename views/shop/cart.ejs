@@ -14,7 +14,7 @@
 			<ul>
 				<% cart.forEach(item => { %>
 				<li>
-					x<%= item.cartItem.quantity %>
+					x<%= item.quantity %>
 					<a href="/product/<%= item.id  %>"> <%=item.title %></a> ($<%=
 					item.price %>)
 

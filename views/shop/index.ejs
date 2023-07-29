@@ -29,8 +29,8 @@
 						<p class="product__description"><%= latestProduct.description %></p>
 					</div>
 					<div class="card__actions">
-						<a href="/product/<%= latestProduct.id %>" class="btn">Details</a>
-						<%- include('../components/add-to-cart',{id:latestProduct.id}) %>
+						<a href="/product/<%= latestProduct._id %>" class="btn">Details</a>
+						<%- include('../components/add-to-cart',{id:latestProduct._id}) %>
 					</div>
 				</article>
 			</div>

@@ -1,7 +1,7 @@
 <form
 	class="product-form"
 	method="POST"
-	action="/admin/<% if (editMode) { %>edit-product/<%= productToEdit.id %><% } else { %>add-product<% } %>"
+	action="/admin/<% if (editMode) { %>edit-product/<%= productToEdit._id %><% } else { %>add-product<% } %>"
 >
 	<div class="form-control">
 		<label for="title">Title</label>

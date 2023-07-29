@@ -11,18 +11,26 @@
 			<% if (orders.length) { %>
 			<h1>Orders (<%= orders.length %>)</h1>
 
-			<ul>
+			<ol>
 				<% orders.forEach(order => { %>
 				<li>
-					<%= order.id %>
+					Order ID: <%= order._id %>
 					<ul>
-						<% order.products.forEach(product => { %>
-						<li><%= product.title %> (<%= product.orderItem.quantity %>)</li>
+						<% order.items.forEach(item => { %>
+						<li>
+							<a
+								href="/product/<%= item.id %>"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<%= item.title %> (<%= item.quantity %>)</a
+							>
+						</li>
 						<% }) %>
 					</ul>
 				</li>
 				<% }) %>
-			</ul>
+			</ol>
 
 			<% } else { %>
 
