@@ -6,7 +6,7 @@ import adminRoutes from './routes/admin';
 import shopRoutes from './routes/shop';
 import { get404 } from './controllers/error';
 import mongoConnect from './libs/database';
-import User from './models/user';
+import User, { UserInterface } from './models/user';
 
 const app = express();
 
@@ -18,8 +18,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(async (req, _, next) => {
 	try {
-		const user = await User.findById('64c2ac8e9bd7135c73ae6f60');
-		req.user = user;
+		const user = (await User.findById(
+			'64c2ac8e9bd7135c73ae6f60'
+		)) as unknown as UserInterface;
+
+		const { _id, name, email, cart } = user;
+
+		req.user = new User(name, email, cart, _id);
 		next();
 	} catch (err) {
 		console.log(err);
