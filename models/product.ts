@@ -9,10 +9,6 @@ export interface ProductItem {
 	description: string;
 	price: string;
 }
-interface Response {
-	productsList: ProductItem[];
-	message: string;
-}
 
 class Product {
 	private title: string;
@@ -47,17 +43,12 @@ class Product {
 
 	static async fetchAll() {
 		try {
-			const result = await getMongoDataBase()
+			const products = (await getMongoDataBase()
 				.collection('products')
 				.find()
-				.toArray();
+				.toArray()) as ProductItem[];
 
-			const productsWithId = result.map((item) => ({
-				...item,
-				id: item._id.toString(),
-			})) as ProductItem[];
-
-			return productsWithId;
+			return products;
 		} catch (err) {
 			console.log(err);
 		}
@@ -65,17 +56,12 @@ class Product {
 
 	static async getById(id: string) {
 		try {
-			const result = await getMongoDataBase()
+			const product = (await getMongoDataBase()
 				.collection('products')
 				.find({ _id: new ObjectId(id) })
-				.next();
+				.next()) as ProductItem;
 
-			const productsWithId = {
-				...result,
-				id: result?._id.toString(),
-			} as ProductItem;
-
-			return productsWithId;
+			return product;
 		} catch (err) {
 			console.log(err);
 		}
