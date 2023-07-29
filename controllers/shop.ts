@@ -1,10 +1,11 @@
 import { RequestHandler } from 'express';
 import Product from '../models/product';
+import { ConvertedProductsCart } from '../models/user';
 
 export const getMainPage: RequestHandler = async (_, res) => {
-	const products = await Product.findAll();
+	const products = await Product.fetchAll();
 
-	const latestProduct = products?.length ? [products.at(-1)] : [];
+	const latestProduct = products?.length ? products.at(-1) : null;
 
 	res.render('shop/index', {
 		latestProduct,
@@ -14,10 +15,10 @@ export const getMainPage: RequestHandler = async (_, res) => {
 };
 
 export const getProducts: RequestHandler = async (_, res) => {
-	const products = await Product.findAll();
+	const products = await Product.fetchAll();
 
 	res.render('shop/products-list', {
-		productsList: products ? products : [],
+		productsList: products || [],
 		title: 'All Products',
 		path: '/products',
 	});
@@ -26,12 +27,12 @@ export const getProducts: RequestHandler = async (_, res) => {
 export const getProductDetails: RequestHandler = async (req, res) => {
 	const productId = req.params.id;
 
-	const searchProduct = await Product.findByPk(productId);
+	const searchProduct = await Product.getById(productId);
 
 	if (searchProduct) {
 		res.render('shop/product-details', {
-			product: searchProduct.dataValues,
-			title: `Product | ${searchProduct.dataValues.title}`,
+			product: searchProduct,
+			title: `Product | ${searchProduct.title}`,
 			path: '/products',
 		});
 	} else {
@@ -43,81 +44,54 @@ export const getProductDetails: RequestHandler = async (req, res) => {
 };
 
 export const getCart: RequestHandler = async (req, res) => {
-	const cart = await req.user.getCart();
-	const products = await cart.getProducts();
+	const cart = (await req.user.getCart()) as ConvertedProductsCart[];
 
-	const getTitle = (cartLength: number) => {
-		if (cartLength === 1) {
-			return cartLength + ' item';
-		} else if (cartLength > 1) {
-			return cartLength + ' items';
-		} else {
-			return '';
+	const totalPrice = cart
+		.reduce((first, next) => first + next.quantity * +next.price, 0)
+		.toFixed(2);
+
+	const totalAmount = cart.reduce((first, next) => first + next.quantity, 0);
+
+	const getTitle = () => {
+		switch (totalAmount) {
+			case 0:
+				return 'is empty';
+
+			case 1:
+				return 'product';
+
+			default:
+				return 'products';
 		}
 	};
 
-	const totalAmount = products.reduce(
-		(acc: any, curr: any) => acc + curr.cartItem.quantity,
-		0
-	);
-
-	const totalPrice = products
-		.reduce(
-			(acc: any, curr: any) => acc + curr.cartItem.quantity * curr.price,
-			0
-		)
-		.toFixed(2);
-
 	res.render('shop/cart', {
-		cart: products,
+		cart,
 		totalPrice,
 		totalAmount,
-		title: 'Your cart ' + getTitle(totalAmount),
+		title: `Your cart ${totalAmount || ''} ${getTitle()}`,
 		path: '/cart',
 	});
 };
 
 export const postCart: RequestHandler = async (req, res) => {
 	const productId = req.body.id;
-	const cart = await req.user.getCart();
-	const productsList = await cart.getProducts({ where: { id: productId } });
+	const product = await Product.getById(productId);
 
-	let product;
-	if (productsList.length) {
-		product = productsList[0];
-	}
-
-	let newQuantity = 1;
-
-	if (product) {
-		const oldQuantity = product.cartItem.quantity;
-		newQuantity = oldQuantity + 1;
-
-		cart.addProduct(product, { through: { quantity: newQuantity } });
-	} else {
-		const product = await Product.findByPk(productId);
-		cart.addProduct(product, { through: { quantity: newQuantity } });
-	}
+	await req.user.addToCart(product);
 
 	res.redirect('/cart');
 };
 
 export const postRemoveFromCart: RequestHandler = async (req, res) => {
 	const productId = req.params.id;
-
-	const cart = await req.user.getCart();
-	const [productToRemove] = await cart.getProducts({
-		where: { id: productId },
-	});
-
-	await productToRemove.cartItem.destroy();
+	await req.user.removeFromCart(productId);
 
 	res.redirect('/cart');
 };
 
 export const getOrders: RequestHandler = async (req, res) => {
-	const orders = await req.user.getOrders({ include: ['products'] });
-	console.log('orders', orders);
+	const orders = await req.user.getOrders();
 
 	res.render('shop/orders', {
 		title: 'Your Orders',
@@ -127,22 +101,7 @@ export const getOrders: RequestHandler = async (req, res) => {
 };
 
 export const postOrder: RequestHandler = async (req, res) => {
-	const cart = await req.user.getCart();
-	const products = await cart.getProducts();
-	const order = await req.user.createOrder();
-
-	await order.addProducts(
-		products.map((product: any) => {
-			product.orderItem = {
-				quantity: product.cartItem.quantity,
-			};
-
-			return product;
-		})
-	);
-
-	await cart.setProducts(null);
-
+	await req.user.addOrder();
 	res.redirect('/orders');
 };
 
