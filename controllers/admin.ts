@@ -1,11 +1,11 @@
 import { RequestHandler } from 'express';
-import Product, { ProductItem } from '../models/product';
+import Product, { ProductInterface } from '../models/product';
 
 export const getProducts: RequestHandler = async (req, res) => {
-	const products = await Product.fetchAll();
+	const productsList = await Product.find();
 
 	res.render('admin/products-list', {
-		productsList: products ? products : [],
+		productsList,
 		title: 'Admin Products',
 		path: '/admin/products',
 	});
@@ -20,30 +20,25 @@ export const getAddProduct: RequestHandler = (_, res) => {
 };
 
 export const postAddProduct: RequestHandler = async (req, res) => {
-	const { title, imageUrl, description, price } = req.body as Omit<
-		ProductItem,
-		'id'
-	>;
+	const productData: ProductInterface = req.body;
 
-	const product = new Product(
-		title,
-		price,
-		description,
-		imageUrl,
-		req.user._id
-	);
-	await product.save();
+	// const product = new Product({ ...productData });
+	// await product.save();
+
+	// or
+
+	await Product.create({ ...productData });
 
 	res.redirect('/products');
 };
 
 export const getEditProduct: RequestHandler = async (req, res) => {
 	const productId = req.params.id;
-	const searchProducts = await Product.getById(productId);
+	const productToEdit = await Product.findById(productId);
 
 	res.render('admin/edit-product', {
-		productToEdit: searchProducts,
-		title: `Edit | ${searchProducts?.title}`,
+		productToEdit,
+		title: `Edit | ${productToEdit?.title}`,
 		path: '/admin/edit-product',
 		editMode: true,
 	});
@@ -51,16 +46,18 @@ export const getEditProduct: RequestHandler = async (req, res) => {
 
 export const postEditProduct: RequestHandler = async (req, res) => {
 	const productId = req.params.id;
-	const updatedProductData: Omit<ProductItem, 'id'> = req.body;
+	const updatedProductData: ProductInterface = req.body;
 
-	await Product.update(productId, updatedProductData);
+	await Product.updateOne({ _id: productId }, { ...updatedProductData });
 
 	res.redirect('/admin/products');
 };
 
 export const postDeleteProduct: RequestHandler = async (req, res) => {
 	const productId = req.params.id;
-	await Product.remove(productId);
+	await Product.deleteOne({
+		_id: productId,
+	});
 
 	res.redirect('/admin/products');
 };

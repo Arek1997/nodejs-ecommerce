@@ -1,11 +1,8 @@
 import { RequestHandler } from 'express';
 import Product from '../models/product';
-import { ConvertedProductsCart } from '../models/user';
 
 export const getMainPage: RequestHandler = async (_, res) => {
-	const products = await Product.fetchAll();
-
-	const latestProduct = products?.length ? products.at(-1) : null;
+	const latestProduct = await Product.findOne().sort({ _id: -1 });
 
 	res.render('shop/index', {
 		latestProduct,
@@ -15,10 +12,10 @@ export const getMainPage: RequestHandler = async (_, res) => {
 };
 
 export const getProducts: RequestHandler = async (_, res) => {
-	const products = await Product.fetchAll();
+	const productsList = await Product.find();
 
 	res.render('shop/products-list', {
-		productsList: products || [],
+		productsList,
 		title: 'All Products',
 		path: '/products',
 	});
@@ -27,7 +24,7 @@ export const getProducts: RequestHandler = async (_, res) => {
 export const getProductDetails: RequestHandler = async (req, res) => {
 	const productId = req.params.id;
 
-	const searchProduct = await Product.getById(productId);
+	const searchProduct = await Product.findById(productId);
 
 	if (searchProduct) {
 		res.render('shop/product-details', {
@@ -44,39 +41,44 @@ export const getProductDetails: RequestHandler = async (req, res) => {
 };
 
 export const getCart: RequestHandler = async (req, res) => {
-	const cart = (await req.user.getCart()) as ConvertedProductsCart[];
+	// const cart = (await req.user.getCart()) as ConvertedProductsCart[];
 
-	const totalPrice = cart
-		.reduce((first, next) => first + next.quantity * +next.price, 0)
-		.toFixed(2);
+	// const totalPrice = cart
+	// 	.reduce((first, next) => first + next.quantity * +next.price, 0)
+	// 	.toFixed(2);
 
-	const totalAmount = cart.reduce((first, next) => first + next.quantity, 0);
+	// const totalAmount = cart.reduce((first, next) => first + next.quantity, 0);
 
-	const getTitle = () => {
-		switch (totalAmount) {
-			case 0:
-				return 'is empty';
+	// const getTitle = () => {
+	// 	switch (totalAmount) {
+	// 		case 0:
+	// 			return 'is empty';
 
-			case 1:
-				return 'product';
+	// 		case 1:
+	// 			return 'product';
 
-			default:
-				return 'products';
-		}
-	};
+	// 		default:
+	// 			return 'products';
+	// 	}
+	// };
 
 	res.render('shop/cart', {
-		cart,
-		totalPrice,
-		totalAmount,
-		title: `Your cart ${totalAmount || ''} ${getTitle()}`,
+		// cart,
+		// totalPrice,
+		// totalAmount,
+		// title: `Your cart ${totalAmount || ''} ${getTitle()}`,
+		// path: '/cart',
+		cart: [],
+		totalPrice: 0,
+		totalAmount: 0,
+		title: `Your cart`,
 		path: '/cart',
 	});
 };
 
 export const postCart: RequestHandler = async (req, res) => {
 	const productId = req.body.id;
-	const product = await Product.getById(productId);
+	const product = await Product.findById(productId);
 
 	await req.user.addToCart(product);
 
@@ -91,12 +93,15 @@ export const postRemoveFromCart: RequestHandler = async (req, res) => {
 };
 
 export const getOrders: RequestHandler = async (req, res) => {
-	const orders = await req.user.getOrders();
+	// const orders = await req.user.getOrders();
 
 	res.render('shop/orders', {
+		// title: 'Your Orders',
+		// path: '/orders',
+		// orders,
 		title: 'Your Orders',
 		path: '/orders',
-		orders,
+		orders: [],
 	});
 };
 
