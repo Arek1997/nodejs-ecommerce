@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import Product, { ProductInterface } from '../models/product';
 
-export const getProducts: RequestHandler = async (req, res) => {
+export const getProducts: RequestHandler = async (_, res) => {
 	const productsList = await Product.find();
 
 	res.render('admin/products-list', {
@@ -20,14 +20,14 @@ export const getAddProduct: RequestHandler = (_, res) => {
 };
 
 export const postAddProduct: RequestHandler = async (req, res) => {
-	const productData: ProductInterface = req.body;
+	const productData: Omit<ProductInterface, 'userId'> = req.body;
 
 	// const product = new Product({ ...productData });
 	// await product.save();
 
 	// or
 
-	await Product.create({ ...productData });
+	await Product.create({ ...productData, userId: req.user });
 
 	res.redirect('/products');
 };
