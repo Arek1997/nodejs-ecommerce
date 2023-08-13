@@ -15,10 +15,15 @@
 				<% cart.forEach(item => { %>
 				<li>
 					x<%= item.quantity %>
-					<a href="/product/<%= item.id  %>"> <%=item.title %></a> ($<%=
-					item.price %>)
+					<a href="/product/<%= item.productId.id  %>">
+						<%=item.productId.title %></a
+					>
+					($<%= item.productId.price %>)
 
-					<form action="/remove-from-cart/<%= item.id %>" method="POST">
+					<form
+						action="/remove-from-cart/<%= item.productId.id %>"
+						method="POST"
+					>
 						<button>Delete</button>
 					</form>
 				</li>

@@ -16,14 +16,10 @@
 				<li>
 					Order ID: <%= order._id %>
 					<ul>
-						<% order.items.forEach(item => { %>
+						<% order.products.forEach(product => { %>
 						<li>
-							<a
-								href="/product/<%= item.id %>"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								<%= item.title %> (<%= item.quantity %>)</a
+							<a href="/product/<%= product._id %>" target="_blank">
+								<%= product.title %> (<%= product.quantity %>)</a
 							>
 						</li>
 						<% }) %>
