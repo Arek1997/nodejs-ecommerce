@@ -1,6 +1,8 @@
-import { Schema, Types, model } from 'mongoose';
+import { Model, Schema, Types, model, Document } from 'mongoose';
+import { ProductInterface } from './product';
+import { ObjectId } from 'mongodb';
 
-interface UserInterface {
+interface UserInterface extends Document {
 	name: string;
 	email: string;
 	cart: {
@@ -11,7 +13,15 @@ interface UserInterface {
 	};
 }
 
-const userSchema = new Schema<UserInterface>({
+interface UserMethods extends UserInterface {
+	addToCart(product: ProductInterface & { _id: Types.ObjectId }): Promise<void>;
+	removeFromCart(productId: string): Promise<void>;
+	clearCart(): Promise<void>;
+}
+
+type UserModel = Model<UserInterface, {}, UserMethods>;
+
+const userSchema = new Schema<UserInterface, UserModel, UserMethods>({
 	name: {
 		type: String,
 		required: true,
@@ -34,6 +44,53 @@ const userSchema = new Schema<UserInterface>({
 	},
 });
 
-const User = model<UserInterface>('User', userSchema);
+userSchema.methods.addToCart = async function (product) {
+	const cartProductIndex = this.cart?.items?.findIndex(
+		(item) => item.productId.toString() === product._id.toString()
+	);
+
+	const updatedCartItems = [...this.cart.items];
+
+	if (cartProductIndex < 0) {
+		const newCartProduct = { productId: product._id, quantity: 1 };
+		updatedCartItems.push(newCartProduct);
+	} else {
+		updatedCartItems[cartProductIndex].quantity += 1;
+	}
+
+	this.cart.items = updatedCartItems;
+
+	try {
+		await this.save();
+	} catch (err) {
+		console.log(err);
+	}
+};
+
+userSchema.methods.removeFromCart = async function (productId) {
+	const updatedCartItems = this.cart.items.filter(
+		(item) => item.productId.toString() !== new ObjectId(productId).toString()
+	);
+
+	this.cart.items = updatedCartItems;
+
+	try {
+		this.save();
+	} catch (err) {
+		console.log(err);
+	}
+};
+
+userSchema.methods.clearCart = async function () {
+	this.cart = { items: [] };
+
+	try {
+		await this.save();
+	} catch (err) {
+		console.log(err);
+	}
+};
+
+const User = model<UserInterface, UserModel>('User', userSchema);
 
 export default User;
