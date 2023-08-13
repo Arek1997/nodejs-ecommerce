@@ -5,9 +5,9 @@ import bodyParser from 'body-parser';
 import adminRoutes from './routes/admin';
 import shopRoutes from './routes/shop';
 import { get404 } from './controllers/error';
+import User from './models/user';
 import mongoose from 'mongoose';
 import { MONGODB_URL } from './utils';
-import User from './models/user';
 
 const app = express();
 
