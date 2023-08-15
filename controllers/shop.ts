@@ -43,7 +43,7 @@ export const getProductDetails: RequestHandler = async (req, res) => {
 
 export const getCart: RequestHandler = async (req, res) => {
 	try {
-		const cart = await req.user
+		const cart = await req.session.user
 			.populate('cart.items.productId')
 			.then((products: any) => products.cart.items);
 
@@ -89,7 +89,9 @@ export const postCart: RequestHandler = async (req, res) => {
 	const productId = req.body.id;
 	const product = await Product.findById(productId);
 
-	await req.user.addToCart(product);
+	console.log(req.session);
+
+	await req.session.user.addToCart(product);
 
 	res.redirect('/cart');
 };
@@ -97,7 +99,7 @@ export const postCart: RequestHandler = async (req, res) => {
 export const postRemoveFromCart: RequestHandler = async (req, res) => {
 	try {
 		const productId = req.params.id;
-		await req.user.removeFromCart(productId);
+		await req.session.user.removeFromCart(productId);
 
 		res.redirect('/cart');
 	} catch (err) {
@@ -106,7 +108,7 @@ export const postRemoveFromCart: RequestHandler = async (req, res) => {
 };
 
 export const getOrders: RequestHandler = async (req, res) => {
-	const orders = await Order.find({ 'user._id': req.user._id });
+	const orders = await Order.find({ 'user._id': req.session.user._id });
 
 	res.render('shop/orders', {
 		title: 'Your Orders',
@@ -116,9 +118,9 @@ export const getOrders: RequestHandler = async (req, res) => {
 };
 
 export const postOrder: RequestHandler = async (req, res) => {
-	const { name, _id } = req.user;
+	const { name, _id } = req.session.user;
 
-	const products = await req.user
+	const products = await req.session.user
 		.populate('cart.items.productId')
 		.then((products: any) =>
 			products.cart.items.map((item: any) => {
@@ -134,7 +136,7 @@ export const postOrder: RequestHandler = async (req, res) => {
 		products,
 	});
 
-	await req.user.clearCart();
+	await req.session.user.clearCart();
 
 	res.redirect('/orders');
 };

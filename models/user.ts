@@ -2,7 +2,7 @@ import { Model, Schema, Types, model, Document } from 'mongoose';
 import { ProductInterface } from './product';
 import { ObjectId } from 'mongodb';
 
-interface UserInterface extends Document {
+export interface UserInterface extends Document {
 	name: string;
 	email: string;
 	cart: {
@@ -13,13 +13,13 @@ interface UserInterface extends Document {
 	};
 }
 
-interface UserMethods extends UserInterface {
+export interface UserMethods extends UserInterface {
 	addToCart(product: ProductInterface & { _id: Types.ObjectId }): Promise<void>;
 	removeFromCart(productId: string): Promise<void>;
 	clearCart(): Promise<void>;
 }
 
-type UserModel = Model<UserInterface, {}, UserMethods>;
+export type UserModel = Model<UserInterface, {}, UserMethods>;
 
 const userSchema = new Schema<UserInterface, UserModel, UserMethods>({
 	name: {

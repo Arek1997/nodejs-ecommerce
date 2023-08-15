@@ -22,12 +22,9 @@ export const getAddProduct: RequestHandler = (_, res) => {
 export const postAddProduct: RequestHandler = async (req, res) => {
 	const productData: Omit<ProductInterface, 'userId'> = req.body;
 
-	// const product = new Product({ ...productData, userId: req.user  });
-	// await product.save();
+	const loggedUser = req.session.user;
 
-	// or
-
-	await Product.create({ ...productData, userId: req.user });
+	await Product.create({ ...productData, userId: loggedUser });
 
 	res.redirect('/products');
 };
