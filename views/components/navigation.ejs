@@ -13,6 +13,8 @@
 				>
 			</li>
 
+			<% if (isAuthenticated) { %>
+
 			<li class="main-header__item">
 				<a class="<%= path === '/cart' ? 'active' : '' %>" href="/cart">Cart</a>
 			</li>
@@ -44,6 +46,25 @@
 					>Checkout</a
 				>
 			</li>
+
+			<% } %>
+		</ul>
+
+		<ul class="main-header__item-list">
+			<% if (isAuthenticated) { %>
+			<li class="main-header__item">
+				<form action="/logout" method="POST">
+					<button class="btn">Logout</button>
+				</form>
+			</li>
+
+			<% } else { %>
+			<li class="main-header__item">
+				<a class="<%= path === '/login' ? 'active' : '' %>" href="/login"
+					>Login</a
+				>
+			</li>
+			<%}%>
 		</ul>
 	</nav>
 </header>
@@ -58,6 +79,9 @@
 				>Products</a
 			>
 		</li>
+
+		<% if (isAuthenticated) { %>
+
 		<li class="mobile-nav__item">
 			<a class="<%= path === '/cart' ? 'active' : '' %>" href="/cart">Cart</a>
 		</li>
@@ -80,5 +104,20 @@
 				>Admin Products
 			</a>
 		</li>
+
+		<% } %> <% if (isAuthenticated) { %>
+		<li class="main-header__item">
+			<form action="/logout" method="POST">
+				<button class="btn">Logout</button>
+			</form>
+		</li>
+
+		<% } else { %>
+		<li class="main-header__item">
+			<a class="<%= path === '/login' ? 'active' : '' %>" href="/login"
+				>Login</a
+			>
+		</li>
+		<%}%>
 	</ul>
 </nav>
