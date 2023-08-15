@@ -54,26 +54,13 @@ app.use(async (req, res, next) => {
 });
 
 app.use('/admin', adminRoutes);
-app.use(shopRoutes);
 app.use(authRoutes);
-
+app.use(shopRoutes);
 app.use(get404);
 
 const connectMongoose = async () => {
 	try {
 		await mongoose.connect(MONGODB_URL);
-		const user = await User.findOne();
-
-		if (!user) {
-			User.create({
-				name: 'Arek',
-				email: 'test@test.com',
-				cart: {
-					items: [],
-				},
-			});
-		}
-
 		app.listen(3000);
 	} catch (err) {
 		console.log(err);
