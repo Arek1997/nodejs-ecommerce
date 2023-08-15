@@ -1,12 +1,19 @@
+require('dotenv').config();
 import path from 'path';
 import express from 'express';
 import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import session from 'express-session';
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 import adminRoutes from './routes/admin';
 import shopRoutes from './routes/shop';
+import authRoutes from './routes/auth';
+
 import { get404 } from './controllers/error';
+
 import User from './models/user';
-import mongoose from 'mongoose';
+
 import { MONGODB_URL } from './utils';
 
 const app = express();
@@ -16,19 +23,39 @@ app.set('views', 'views');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(
+	session({
+		secret: process.env.SESSION_SECRET!,
+		resave: false,
+		saveUninitialized: false,
+		cookie: {
+			maxAge: 60 * 60 * 1000, // 1h
+			httpOnly: true,
+		},
+		store: new MongoDBStore({
+			uri: MONGODB_URL,
+			collection: 'sessions',
+		}),
+	})
+);
 
-app.use(async (req, _, next) => {
+app.use(async (req, res, next) => {
 	try {
-		const user = await User.findById('64c945f0f6a79e87c045292e');
-		req.user = user;
-		next();
+		res.locals.isAuthenticated = req.session.isLoggedIn;
+
+		if (req.session.isLoggedIn) {
+			req.session.user = User.hydrate(req.session.user);
+		}
 	} catch (err) {
 		console.log(err);
+	} finally {
+		next();
 	}
 });
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
+app.use(authRoutes);
 
 app.use(get404);
 

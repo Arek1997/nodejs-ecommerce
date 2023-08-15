@@ -3,3 +3,12 @@ declare namespace Express {
 		user: WithId<Document> | null | undefined;
 	}
 }
+
+declare global {
+	declare module 'express-session' {
+		interface SessionData {
+			isLoggedIn: boolean;
+			user: any;
+		}
+	}
+}
