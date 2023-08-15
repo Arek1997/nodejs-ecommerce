@@ -7,8 +7,11 @@ import {
 	postDeleteProduct,
 	postEditProduct,
 } from '../controllers/admin';
+import isAuth from '../middleware/is-auth';
 
 const router = express.Router();
+
+router.use(isAuth);
 
 router.get('/add-product', getAddProduct);
 

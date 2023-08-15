@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import {
 	getCart,
 	getCheckout,
@@ -10,6 +10,7 @@ import {
 	postRemoveFromCart,
 	postOrder,
 } from '../controllers/shop';
+import isAuth from '../middleware/is-auth';
 
 const router = express.Router();
 
@@ -18,6 +19,8 @@ router.get('/', getMainPage);
 router.get('/products', getProducts);
 
 router.get('/product/:id', getProductDetails);
+
+router.use(isAuth);
 
 router.get('/cart', getCart);
 
