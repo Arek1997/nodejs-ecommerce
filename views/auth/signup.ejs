@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<%- include('../components/head') %>
+		<link rel="stylesheet" href="/css/forms.css" />
+		<link rel="stylesheet" href="/css/auth.css" />
+	</head>
+
+	<body>
+		<%- include('../components/navigation') %>
+
+		<main>
+			<h1 class="text-center">Signup</h1>
+			<div class="grid">
+				<form class="login-form" action="/signup" method="POST">
+					<div class="form-control">
+						<label for="email">E-Mail</label>
+						<input type="email" name="email" id="email" required />
+					</div>
+					<div class="form-control">
+						<label for="password">Password</label>
+						<input type="password" name="password" id="password" required />
+					</div>
+					<div class="form-control">
+						<label for="confirmPassword">Confirm Password</label>
+						<input
+							type="password"
+							name="confirmPassword"
+							id="confirmPassword"
+							required
+						/>
+					</div>
+					<button class="btn" type="submit">Signup</button>
+				</form>
+			</div>
+		</main>
+	</body>
+</html>
