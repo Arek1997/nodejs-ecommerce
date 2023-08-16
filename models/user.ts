@@ -3,8 +3,8 @@ import { ProductInterface } from './product';
 import { ObjectId } from 'mongodb';
 
 export interface UserInterface extends Document {
-	name: string;
 	email: string;
+	password: string;
 	cart: {
 		items: {
 			productId: Types.ObjectId;
@@ -22,11 +22,11 @@ export interface UserMethods extends UserInterface {
 export type UserModel = Model<UserInterface, {}, UserMethods>;
 
 const userSchema = new Schema<UserInterface, UserModel, UserMethods>({
-	name: {
+	email: {
 		type: String,
 		required: true,
 	},
-	email: {
+	password: {
 		type: String,
 		required: true,
 	},
