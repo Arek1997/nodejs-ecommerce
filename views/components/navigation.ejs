@@ -55,6 +55,7 @@
 			<li class="main-header__item">
 				<form action="/logout" method="POST">
 					<button class="btn">Logout</button>
+					<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 				</form>
 			</li>
 
@@ -114,6 +115,7 @@
 		<li class="main-header__item">
 			<form action="/logout" method="POST">
 				<button class="btn">Logout</button>
+				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 			</form>
 		</li>
 

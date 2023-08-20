@@ -11,6 +11,11 @@
 
 		<main>
 			<h1 class="text-center">Login</h1>
+
+			<% if (errorMessage) { %>
+			<p class="message message--error"><%= errorMessage %></p>
+			<% } %>
+
 			<div class="grid">
 				<form class="login-form" method="POST" action="/login">
 					<div class="form-control">
@@ -24,6 +29,7 @@
 					</div>
 
 					<button class="btn" type="submit">Login</button>
+					<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 				</form>
 			</div>
 		</main>
