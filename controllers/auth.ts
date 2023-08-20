@@ -3,12 +3,15 @@ import User from '../models/user';
 import bcrypt from 'bcrypt';
 
 export const getLogin: RequestHandler = (req, res) => {
+	const [errorMessage] = req.flash('error-message');
+
 	if (req.session.isLoggedIn) {
 		res.redirect('/');
 	} else {
 		res.render('auth/login', {
 			title: 'Login',
 			path: '/login',
+			errorMessage,
 		});
 	}
 };
@@ -20,6 +23,7 @@ export const postLogin: RequestHandler = async (req, res) => {
 		const userAssignedToEmail = await User.findOne({ email });
 
 		if (!userAssignedToEmail) {
+			req.flash('error-message', 'Invalid email or password was provided.');
 			return res.redirect('/login');
 		}
 
@@ -41,12 +45,15 @@ export const postLogin: RequestHandler = async (req, res) => {
 };
 
 export const getSignup: RequestHandler = (req, res) => {
+	const [errorMessage] = req.flash('error-message');
+
 	if (req.session.isLoggedIn) {
 		res.redirect('/');
 	} else {
 		res.render('auth/signup', {
 			title: 'Signup',
 			path: '/signup',
+			errorMessage,
 		});
 	}
 };
@@ -62,6 +69,7 @@ export const postSignup: RequestHandler = async (req, res) => {
 		const emailExist = await User.findOne({ email });
 
 		if (emailExist) {
+			req.flash('error-message', 'This email already exist.');
 			return res.redirect('/signup');
 		}
 
