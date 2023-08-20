@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import Product from '../models/product';
 import Order from '../models/order';
 
-export const getMainPage: RequestHandler = async (_, res) => {
+export const getMainPage: RequestHandler = async (req, res) => {
 	const latestProduct = await Product.findOne().sort({ _id: -1 });
 
 	res.render('shop/index', {
@@ -118,7 +118,7 @@ export const getOrders: RequestHandler = async (req, res) => {
 };
 
 export const postOrder: RequestHandler = async (req, res) => {
-	const { name, _id } = req.session.user;
+	const { email, _id } = req.session.user;
 
 	const products = await req.session.user
 		.populate('cart.items.productId')
@@ -130,7 +130,7 @@ export const postOrder: RequestHandler = async (req, res) => {
 
 	await Order.create({
 		user: {
-			name,
+			email,
 			_id,
 		},
 		products,

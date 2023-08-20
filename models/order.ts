@@ -3,7 +3,7 @@ import { Schema, Types, model, Document } from 'mongoose';
 interface Order extends Document {
 	user: {
 		_id: Types.ObjectId;
-		name: string;
+		email: string;
 	};
 
 	products: {
@@ -20,7 +20,7 @@ const orderSchema = new Schema<Order>({
 			ref: 'User',
 		},
 
-		name: {
+		email: {
 			type: String,
 			required: true,
 		},
