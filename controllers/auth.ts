@@ -35,8 +35,10 @@ export const postLogin: RequestHandler = async (req, res) => {
 		if (isPasswordCorrect) {
 			req.session.isLoggedIn = true;
 			req.session.user = userAssignedToEmail;
+
 			req.session.save(() => res.redirect('/'));
 		} else {
+			req.flash('error-message', 'Invalid email or password was provided.');
 			res.redirect('/login');
 		}
 	} catch (err) {
