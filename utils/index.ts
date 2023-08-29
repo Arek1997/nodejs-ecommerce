@@ -1,4 +1,4 @@
-require('dotenv').config();
+import 'dotenv/config';
 
 const encodedPassword = encodeURIComponent(`${process.env.MONGODB_PASSWORD}`);
 

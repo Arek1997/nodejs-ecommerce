@@ -1,4 +1,4 @@
-require('dotenv').config();
+import 'dotenv/config';
 
 import session from 'express-session';
 const MongoDBStore = require('connect-mongodb-session')(session);
