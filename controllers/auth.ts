@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import User from '../models/user';
 import bcrypt from 'bcrypt';
+import { signupHandler } from '../utils/mailjet';
 
 export const getLogin: RequestHandler = (req, res) => {
 	const [errorMessage] = req.flash('error-message');
@@ -75,6 +76,11 @@ export const postSignup: RequestHandler = async (req, res) => {
 			return res.redirect('/signup');
 		}
 
+		if (password !== confirmPassword) {
+			req.flash('error-message', 'Passwords are not the same.');
+			return res.redirect('/signup');
+		}
+
 		const hashedPassword = await bcrypt.hash(password, 15);
 
 		User.create({
@@ -86,6 +92,7 @@ export const postSignup: RequestHandler = async (req, res) => {
 		});
 
 		res.redirect('/login');
+		signupHandler(email);
 	} catch (err) {
 		console.log(err);
 	}
