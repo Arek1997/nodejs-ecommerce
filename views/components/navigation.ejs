@@ -53,6 +53,14 @@
 		<ul class="main-header__item-list">
 			<% if (isAuthenticated) { %>
 			<li class="main-header__item">
+				<a
+					class="<%= path === '/change-password' ? 'active' : '' %>"
+					href="/change-password"
+					>Change Password</a
+				>
+			</li>
+
+			<li class="main-header__item">
 				<form action="/logout" method="POST">
 					<button class="btn">Logout</button>
 					<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
@@ -110,8 +118,14 @@
 				>Admin Products
 			</a>
 		</li>
+		<li class="mobile-nav__item">
+			<a
+				class="<%= path === '/change-password' ? 'active' : '' %>"
+				href="/change-password"
+				>Change Password</a
+			>
+		</li>
 
-		<% } %> <% if (isAuthenticated) { %>
 		<li class="main-header__item">
 			<form action="/logout" method="POST">
 				<button class="btn">Logout</button>
