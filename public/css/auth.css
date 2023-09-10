@@ -8,8 +8,13 @@
 .message {
 	text-align: center;
 	font-size: 0.9rem;
+	font-weight: bold;
 }
 
 .message--error {
 	color: tomato;
+}
+
+.message--success {
+	color: forestgreen;
 }
