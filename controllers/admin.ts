@@ -1,8 +1,10 @@
 import { RequestHandler } from 'express';
 import Product, { ProductInterface } from '../models/product';
 
-export const getProducts: RequestHandler = async (_, res) => {
-	const productsList = await Product.find();
+export const getProducts: RequestHandler = async (req, res) => {
+	const userId = req.session.user;
+
+	const productsList = await Product.find({ userId });
 
 	res.render('admin/products-list', {
 		productsList,
@@ -31,30 +33,57 @@ export const postAddProduct: RequestHandler = async (req, res) => {
 
 export const getEditProduct: RequestHandler = async (req, res) => {
 	const productId = req.params.id;
-	const productToEdit = await Product.findById(productId);
+	const userId = req.session.user._id.toString();
 
-	res.render('admin/edit-product', {
-		productToEdit,
-		title: `Edit | ${productToEdit?.title}`,
-		path: '/admin/edit-product',
-		editMode: true,
-	});
+	try {
+		const productToEdit = await Product.findById(productId);
+
+		if (productToEdit?.userId?.toString() !== userId) {
+			await Promise.reject('No autorized');
+		}
+
+		res.render('admin/edit-product', {
+			productToEdit,
+			title: `Edit | ${productToEdit?.title}`,
+			path: '/admin/edit-product',
+			editMode: true,
+		});
+	} catch (error) {
+		console.log(error);
+		res.redirect('/');
+	}
 };
 
 export const postEditProduct: RequestHandler = async (req, res) => {
 	const productId = req.params.id;
-	const updatedProductData: ProductInterface = req.body;
 
-	await Product.updateOne({ _id: productId }, { ...updatedProductData });
+	try {
+		const updatedProductData: ProductInterface = req.body;
 
-	res.redirect('/admin/products');
+		await Product.updateOne(
+			{ _id: productId, userId: req.session.user },
+			{ ...updatedProductData }
+		);
+
+		res.redirect('/admin/products');
+	} catch (error) {
+		console.log(error);
+		res.redirect('/');
+	}
 };
 
 export const postDeleteProduct: RequestHandler = async (req, res) => {
 	const productId = req.params.id;
-	await Product.deleteOne({
-		_id: productId,
-	});
 
-	res.redirect('/admin/products');
+	try {
+		await Product.deleteOne({
+			_id: productId,
+			userId: req.session.user,
+		});
+
+		res.redirect('/admin/products');
+	} catch (error) {
+		console.log(error);
+		res.redirect('/');
+	}
 };
