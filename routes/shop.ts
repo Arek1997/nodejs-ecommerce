@@ -1,16 +1,15 @@
-import express, { Router } from 'express';
-import {
-	getCart,
-	getCheckout,
-	getMainPage,
-	getOrders,
-	getProducts,
-	getProductDetails,
-	postCart,
-	postRemoveFromCart,
-	postOrder,
-} from '../controllers/shop';
+import express from 'express';
+
 import isAuth from '../middleware/is-auth';
+import { getCart } from '../controllers/shop/getCart';
+import { postCart } from '../controllers/shop/postCart';
+import { postOrder } from '../controllers/shop/postOrder';
+import { getOrders } from '../controllers/shop/getOrders';
+import { getMainPage } from '../controllers/shop/getMainPage';
+import { getProducts } from '../controllers/shop/getProducts';
+import { getCheckout } from '../controllers/shop/getCheckout';
+import { getProductDetails } from '../controllers/shop/getProductDetails';
+import { postRemoveFromCart } from '../controllers/shop/postRemoveFromCart';
 
 const router = express.Router();
 

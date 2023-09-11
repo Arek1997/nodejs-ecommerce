@@ -8,7 +8,7 @@ import adminRoutes from './routes/admin';
 import shopRoutes from './routes/shop';
 import authRoutes from './routes/auth';
 
-import { get404 } from './controllers/error';
+import { get404 } from './controllers/error/get404';
 
 import setSessionMiddleware from './middleware/session';
 import assignUserMiddleware from './middleware/assign-user';

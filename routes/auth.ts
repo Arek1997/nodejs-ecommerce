@@ -1,15 +1,14 @@
 import express from 'express';
-import {
-	getChangePassword,
-	getLogin,
-	getPasswordReset,
-	getSignup,
-	postChangePassword,
-	postLogin,
-	postLogout,
-	postPasswordReset,
-	postSignup,
-} from '../controllers/auth';
+
+import { postChangePassword } from '../controllers/auth/postChangePassword';
+import { getChangePassword } from '../controllers/auth/getChangePassword';
+import { postPasswordReset } from '../controllers/auth/postPasswordReset';
+import { getPasswordReset } from '../controllers/auth/getPasswordReset';
+import { postLogout } from '../controllers/auth/postLogout';
+import { postSignup } from '../controllers/auth/postSignup';
+import { getSignup } from '../controllers/auth/getSignup';
+import { postLogin } from '../controllers/auth/postLogin';
+import { getLogin } from '../controllers/auth/getLogin';
 
 const router = express.Router();
 

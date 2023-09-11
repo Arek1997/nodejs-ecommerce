@@ -1,13 +1,13 @@
 import express from 'express';
-import {
-	getAddProduct,
-	getEditProduct,
-	getProducts,
-	postAddProduct,
-	postDeleteProduct,
-	postEditProduct,
-} from '../controllers/admin';
+
 import isAuth from '../middleware/is-auth';
+
+import { getProducts } from '../controllers/admin/getProducts';
+import { getAddProduct } from '../controllers/admin/getAddProduct';
+import { postAddProduct } from '../controllers/admin/postAddProduct';
+import { getEditProduct } from '../controllers/admin/getEditProduct';
+import { postEditProduct } from '../controllers/admin/postEditProduct';
+import { postDeleteProduct } from '../controllers/admin/postDeleteProduct';
 
 const router = express.Router();
 
