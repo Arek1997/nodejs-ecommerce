@@ -5,6 +5,8 @@ import { ObjectId } from 'mongodb';
 export interface UserInterface extends Document {
 	email: string;
 	password: string;
+	resetToken: string;
+	resetTokenExpiration: number;
 	cart: {
 		items: {
 			productId: Types.ObjectId;
@@ -30,6 +32,8 @@ const userSchema = new Schema<UserInterface, UserModel, UserMethods>({
 		type: String,
 		required: true,
 	},
+	resetToken: String,
+	resetTokenExpiration: Number,
 	cart: {
 		items: [
 			{
