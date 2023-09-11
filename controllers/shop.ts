@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import Product from '../models/product';
 import Order from '../models/order';
 
-export const getMainPage: RequestHandler = async (req, res) => {
+export const getMainPage: RequestHandler = async (_, res) => {
 	const latestProduct = await Product.findOne().sort({ _id: -1 });
 
 	res.render('shop/index', {
