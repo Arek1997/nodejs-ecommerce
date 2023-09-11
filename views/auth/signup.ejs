@@ -20,11 +20,23 @@
 				<form class="login-form" action="/signup" method="POST">
 					<div class="form-control">
 						<label for="email">E-Mail</label>
-						<input type="email" name="email" id="email" required />
+						<input
+							type="email"
+							name="email"
+							id="email"
+							value="<%= inputs?.email %>"
+							required
+						/>
 					</div>
 					<div class="form-control">
 						<label for="password">Password</label>
-						<input type="password" name="password" id="password" required />
+						<input
+							type="password"
+							name="password"
+							id="password"
+							value="<%= inputs?.password %>"
+							required
+						/>
 					</div>
 					<div class="form-control">
 						<label for="confirmPassword">Confirm Password</label>
@@ -32,6 +44,7 @@
 							type="password"
 							name="confirmPassword"
 							id="confirmPassword"
+							value="<%= inputs?.confirmPassword %>"
 							required
 						/>
 					</div>

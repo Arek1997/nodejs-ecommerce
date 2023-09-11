@@ -20,12 +20,24 @@
 				<form class="login-form" method="POST" action="/login">
 					<div class="form-control">
 						<label for="email">E-mail</label>
-						<input type="email" name="email" id="email" required />
+						<input
+							type="email"
+							name="email"
+							id="email"
+							value="<%= inputs?.email %>"
+							required
+						/>
 					</div>
 
 					<div class="form-control">
 						<label for="password">Password</label>
-						<input type="password" name="password" id="password" required />
+						<input
+							type="password"
+							name="password"
+							id="password"
+							value="<%= inputs?.password %>"
+							required
+						/>
 					</div>
 
 					<a href="/password-reset" class="reset-password-link"
