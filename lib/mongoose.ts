@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { MONGODB_URL } from '../utils';
+import { MONGODB_URL } from '../utils/mongoDb';
 
 const connectMongoose = async (callback: () => void) => {
 	try {

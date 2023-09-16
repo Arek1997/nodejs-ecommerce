@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 import session from 'express-session';
 const MongoDBStore = require('connect-mongodb-session')(session);
-import { MONGODB_URL } from '../utils';
+import { MONGODB_URL } from '../utils/mongoDb';
 
 const setSessionMiddleware = session({
 	secret: process.env.SESSION_SECRET!,
