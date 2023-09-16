@@ -12,9 +12,7 @@
 		<main>
 			<h1 class="text-center">Login</h1>
 
-			<% if (errorMessage) { %>
-			<p class="message message--error"><%= errorMessage %></p>
-			<% } %>
+			<%- include('../components/error-message') %>
 
 			<div class="grid">
 				<form class="login-form" method="POST" action="/login">

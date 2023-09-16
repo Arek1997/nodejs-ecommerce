@@ -1,0 +1,24 @@
+.message-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.message {
+	padding: 0.5rem;
+	border: 1px solid transparent;
+	border-radius: 6px;
+	font-weight: bold;
+	text-align: center;
+	font-size: 0.9rem;
+}
+
+.message--error {
+	border-color: red;
+	background: rgb(255, 176, 176);
+	color: red;
+}
+
+.message--success {
+	color: forestgreen;
+}
