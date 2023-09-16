@@ -12,6 +12,7 @@ import errorRoutes from './routes/error';
 import setSessionMiddleware from './middleware/session';
 import assignUserMiddleware from './middleware/assign-user';
 import addValuesToViews from './middleware/add-values-to-views';
+import multerMiddleware from './middleware/multer-file';
 
 import connectMongoose from './lib/mongoose';
 import { get500 } from './controllers/error/get500';
@@ -23,6 +24,7 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(multerMiddleware);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(setSessionMiddleware);
@@ -38,6 +40,7 @@ app.use(shopRoutes);
 app.use(errorRoutes);
 
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+	console.log('ERROR:', error);
 	get500(req, res, next);
 });
 
