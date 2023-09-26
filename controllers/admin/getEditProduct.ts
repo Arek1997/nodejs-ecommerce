@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import Product from '../../models/product';
 import { HTML_FILE_INPUT_NAME_ATTRIBUTE } from '../../utils/multer';
+import { inputFileAcceptedFiles } from '../../utils/consts';
 
 export const getEditProduct: RequestHandler = async (req, res) => {
 	const productId = req.params.id;
@@ -19,6 +20,7 @@ export const getEditProduct: RequestHandler = async (req, res) => {
 			path: '/admin/edit-product',
 			editMode: true,
 			fileInputNameAttribute: HTML_FILE_INPUT_NAME_ATTRIBUTE,
+			acceptedFiles: inputFileAcceptedFiles,
 		});
 	} catch (error) {
 		console.log(error);
