@@ -40,6 +40,11 @@
 				'input:not([type="hidden"]), textarea'
 			);
 
+			const isThisFIleAnImage = (fileList) => {
+				const [file] = fileList;
+				return file?.type.startsWith('image');
+			};
+
 			const createUrlFromFile = (fileList) => {
 				const DEFAULT_NO_PHOTO =
 					'https://chambrelan.com/wp-content/uploads/2022/02/no-image.png';
@@ -50,8 +55,16 @@
 			const fillPreviewHandler = (editingElement) => {
 				const editingElementID = editingElement.id;
 				const editingElementValue = editingElement.value;
-
 				const isImageElement = editingElementID.startsWith('image');
+
+				if (
+					isImageElement &&
+					editingElement.files.length &&
+					!isThisFIleAnImage(editingElement.files)
+				) {
+					alert('File must be an image.');
+					return (editingElement.value = null);
+				}
 
 				const elementToChange = isImageElement
 					? document.querySelector(`.card__image img`)
