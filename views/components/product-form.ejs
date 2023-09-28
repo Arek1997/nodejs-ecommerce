@@ -11,7 +11,7 @@
 			name="title"
 			id="title"
 			required
-			value="<% if (editMode) { %><%=productToEdit.title %><% } %>"
+			value="<%= editMode ? productToEdit.title : inputs?.title %>"
 		/>
 	</div>
 
@@ -19,8 +19,9 @@
 		<label for="image">Image</label>
 		<input
 			type="file"
-			name="<%= fileInputNameAttribute %>"
 			id="image"
+			name="<%= fileInputNameAttribute %>"
+			accept="<%= acceptedFiles %>"
 			required
 		/>
 	</div>
@@ -28,7 +29,8 @@
 	<div class="form-control">
 		<label for="description">Description</label>
 		<textarea name="description" id="description" required>
-<% if (editMode) { %><%=productToEdit.description %><% } %></textarea
+<%= editMode ? productToEdit.description : inputs?.description %>
+		</textarea
 		>
 	</div>
 
@@ -40,7 +42,7 @@
 			id="price"
 			step="0.01"
 			required
-			value="<% if (editMode) { %><%=productToEdit.price %><% } %>"
+			value="<%= editMode ? productToEdit.price : inputs?.price %>"
 		/>
 	</div>
 
