@@ -1,4 +1,5 @@
 import { Schema, Types, model, Document } from 'mongoose';
+import { ProductInterface } from './product';
 
 interface Order extends Document {
 	user: {
@@ -6,10 +7,7 @@ interface Order extends Document {
 		email: string;
 	};
 
-	products: {
-		product: object;
-		quantity: number;
-	}[];
+	products: Array<ProductInterface & { quantity: number }>;
 }
 
 const orderSchema = new Schema<Order>({
