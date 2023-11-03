@@ -40,6 +40,6 @@ export const getCart: RequestHandler = async (req, res) => {
 			path: '/cart',
 		});
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 	}
 };

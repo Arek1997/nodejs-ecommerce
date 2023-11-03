@@ -23,7 +23,7 @@ export const getEditProduct: RequestHandler = async (req, res) => {
 			acceptedFiles: inputFileAcceptedFiles,
 		});
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		res.redirect('/');
 	}
 };

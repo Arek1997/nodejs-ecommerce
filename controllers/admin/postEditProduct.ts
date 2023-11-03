@@ -35,14 +35,14 @@ export const postEditProduct: RequestHandler = async (req, res) => {
 
 		const imageUrl = '/' + image.path;
 
-		// await Product.updateOne(
-		// 	{ _id: productId, userId: req.session.user },
-		// 	{ ...updatedProductData, imageUrl }
-		// );
+		await Product.updateOne(
+			{ _id: productId, userId: req.session.user },
+			{ ...updatedProductData, imageUrl }
+		);
 
 		res.redirect('/admin/products');
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		res.redirect('/');
 	}
 };

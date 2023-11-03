@@ -67,7 +67,7 @@ userSchema.methods.addToCart = async function (product) {
 	try {
 		await this.save();
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 	}
 };
 
@@ -81,7 +81,7 @@ userSchema.methods.removeFromCart = async function (productId) {
 	try {
 		this.save();
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 	}
 };
 
@@ -91,7 +91,7 @@ userSchema.methods.clearCart = async function () {
 	try {
 		await this.save();
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 	}
 };
 

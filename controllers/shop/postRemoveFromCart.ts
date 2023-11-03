@@ -7,6 +7,6 @@ export const postRemoveFromCart: RequestHandler = async (req, res) => {
 
 		res.redirect('/cart');
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 	}
 };
