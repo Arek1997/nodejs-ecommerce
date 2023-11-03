@@ -1,15 +1,16 @@
 import express from 'express';
 
 import isAuth from '../middleware/is-auth';
-import { getCart } from '../controllers/shop/getCart';
-import { postCart } from '../controllers/shop/postCart';
-import { postOrder } from '../controllers/shop/postOrder';
-import { getOrders } from '../controllers/shop/getOrders';
 import { getMainPage } from '../controllers/shop/getMainPage';
 import { getProducts } from '../controllers/shop/getProducts';
-import { getCheckout } from '../controllers/shop/getCheckout';
 import { getProductDetails } from '../controllers/shop/getProductDetails';
+import { getCart } from '../controllers/shop/getCart';
+import { postCart } from '../controllers/shop/postCart';
 import { postRemoveFromCart } from '../controllers/shop/postRemoveFromCart';
+import { getOrders } from '../controllers/shop/getOrders';
+import { postOrder } from '../controllers/shop/postOrder';
+import { getCheckout } from '../controllers/shop/getCheckout';
+import { getInvoice } from '../controllers/shop/getInvoice';
 
 const router = express.Router();
 
@@ -28,6 +29,8 @@ router.post('/add-to-cart', postCart);
 router.post('/remove-from-cart/:id', postRemoveFromCart);
 
 router.get('/orders', getOrders);
+
+router.get('/orders/:id', getInvoice);
 
 router.post('/create-order', postOrder);
 
