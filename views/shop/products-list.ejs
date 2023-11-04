@@ -33,7 +33,7 @@
 				</article>
 				<% }) %>
 			</div>
-			<% } else { %>
+			<%- include('../components/pagination') %> <% } else { %>
 			<h1>
 				You have not any products yet.
 				<a href="/admin/add-product">Add some!</a>
