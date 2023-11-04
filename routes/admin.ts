@@ -7,7 +7,7 @@ import { getAddProduct } from '../controllers/admin/getAddProduct';
 import { postAddProduct } from '../controllers/admin/postAddProduct';
 import { getEditProduct } from '../controllers/admin/getEditProduct';
 import { postEditProduct } from '../controllers/admin/postEditProduct';
-import { postDeleteProduct } from '../controllers/admin/postDeleteProduct';
+import { deleteProduct } from '../controllers/admin/deleteProduct';
 
 const router = express.Router();
 
@@ -23,6 +23,6 @@ router.post('/edit-product/:id', postEditProduct);
 
 router.post('/add-product', postAddProduct);
 
-router.post('/delete-product/:id', postDeleteProduct);
+router.delete('/product/:id', deleteProduct);
 
 export default router;
