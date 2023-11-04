@@ -1,0 +1,9 @@
+<section class="pagination">
+	<% [...Array(paginationPages)].forEach((_, index) => { %>
+	<a
+		href="<%= path %>/?page=<%= index + 1 %>"
+		class="pagination__item <%= index + 1 === currentPage ? 'pagination__item--active' : '' %>"
+		><%= index + 1 %></a
+	>
+	<% }) %>
+</section>

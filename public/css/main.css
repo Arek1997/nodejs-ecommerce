@@ -245,3 +245,29 @@ form {
 	text-decoration: underline;
 	color: purple;
 }
+
+.pagination {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	margin: 2rem 0;
+}
+
+.pagination__item {
+	padding: 0.5rem 1rem;
+	background-color: #00695c;
+	color: #fff;
+	border-radius: 50%;
+	transition: transform 0.3s ease;
+}
+
+.pagination__item:hover,
+.pagination__item:focus {
+	transform: scale(0.9);
+	text-decoration: none !important;
+}
+
+.pagination__item--active {
+	background-color: #000;
+}
