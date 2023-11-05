@@ -11,7 +11,6 @@ export const postAddProduct: RequestHandler = async (req, res) => {
 	const { title, description, price } = productData;
 
 	const image = req.file;
-	console.log('file', image);
 
 	if (!image) {
 		return res.status(422).render('admin/add-product', {
